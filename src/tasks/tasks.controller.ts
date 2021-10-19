@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { Prisma } from '.prisma/client';
 
 @Controller('tasks')
 export class TasksController {
@@ -22,9 +31,9 @@ export class TasksController {
     return this.tasksService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.tasksService.update(+id, updateTaskDto);
+  @Patch()
+  update(@Body('id') id: number, @Body() data: UpdateTaskDto) {
+    return this.tasksService.update({ where: { id }, data });
   }
 
   @Delete(':id')
